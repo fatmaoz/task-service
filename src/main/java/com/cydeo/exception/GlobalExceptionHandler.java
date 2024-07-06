@@ -2,7 +2,6 @@ package com.cydeo.exception;
 
 import com.cydeo.dto.wrapper.ExceptionWrapper;
 import com.cydeo.dto.wrapper.ValidationExceptionWrapper;
-import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,18 +55,6 @@ public class GlobalExceptionHandler {
                 .localDateTime(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionWrapper);
-    }
-
-    @ExceptionHandler({FeignException.class, FeignException.FeignClientException.class})
-    public ResponseEntity<ExceptionWrapper> handleFeignExceptions(Throwable exception) {
-        log.error(exception.getMessage());
-        ExceptionWrapper exceptionWrapper = ExceptionWrapper.builder()
-                .success(false)
-                .message(exception.getMessage())
-                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                .localDateTime(LocalDateTime.now())
-                .build();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionWrapper);
     }
 
     @ExceptionHandler({EmployeeCheckFailedException.class, ManagerNotRetrievedException.class, ProjectCheckFailedException.class})
